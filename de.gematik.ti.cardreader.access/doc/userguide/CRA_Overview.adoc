@@ -1,0 +1,100 @@
+include::config.adoc[]
+
+== Overview
+
+ifndef::useCachePlantuml[]
+
+.CardReaderAccess API
+[plantuml,CRA/generated/overview,png,caption="{classdia-caption} {counter:class}: ",650]
+----
+include::{plantumldir}/CRA/overview.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.CardReaderAccess API
+image::CRA/generated/overview.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+=== CardReader Events
+// tag::CardReaderRegistry[]
+If an application or library user would receive information's about card reader connection or disconnection must the receiver subscribe to EventBus for Event
+`CardReaderConnectedEvent` and `CardReaderDisconnectedEvent`.
+
+// end::CardReaderRegistry[]
+For usage see <<CardReaderConnectionEvents>>
+
+=== CardReaderControllerManager
+// tag::CardReaderControllerManager[]
+This manager object provides functionalities over all <<ICardReaderController,CardReaderController>> and <<provider,CardReaderProviders>> to request all available card readers and information's about <<provider, CardReaderProviders>> (e.g. licence, description).
+Furthermore is this manager the service loader for <<provider,CardReaderProviders>> in your application.
+ifndef::useCachePlantuml[]
+
+.CardReaderControllerManager
+[plantuml,CRA/generated/access,png,caption="{classdia-caption} {counter:class}: ",650]
+----
+include::{plantumldir}/CRA/access.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.CardReaderControllerManager
+image::CRA/generated/access.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::CardReaderControllerManager[]
+// tag::CardReaderControllerManager_initializer[]
+The special and optional functionality is the initializer method for <<ICardReaderController,CardReaderController>>.
+The initialize method will call with implementation object of <<ICardReaderControllerInitializer>>.
+The <<CardReaderControllerInitializer,ICardReaderControllerInitializer>> will call from CardReaderControllerManager for each found <<ICardReaderController>>
+and the implementation of <<ICardReaderControllerInitializer>> will decides for which <<ICardReaderController>> is something todo.
+This methodology makes it possible to inject the e.g. android application context to <<provider,service provider>> from higher layer applications without pass-through each layer.
+The following sequence diagram describe the workflow for initialization on ctc1 (represents an android specific ICardReaderController implementation) and ctc2 (plain java implementation e.g. pcsc ICardReaderController implementation).
+The <<ICardReaderControllerInitializer>> decides the need of android context.
+ifndef::useCachePlantuml[]
+
+.Initializing sequence for ICardReaderController with ICardReaderControllerInitializer
+[plantuml,CRA/generated/initializecontrol,png,caption="{seqdia-caption} {counter:seq}: ",650]
+----
+include::{plantumldir}/CRA/initializecontrol.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.Initializing sequence for ICardReaderController with ICardReaderControllerInitializer
+image::CRA/generated/initializecontrol.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::CardReaderControllerManager_initializer[]
+
+=== CardReaderControllerInitializer
+// tag::ICardReaderControllerInitializer[]
+The implementing class for ´ICardReaderControllerInitializer´ interface will initialize <<ICardReaderController,CardReaderController>> e.g. inject android application context or prepare environment.
+ifndef::useCachePlantuml[]
+
+.CardReaderControllerInitializer
+[plantuml,CRA/generated/cardreadercontrollerinitializer,png,caption="{classdia-caption} {counter:class}: ",650]
+----
+include::{plantumldir}/CRA/cardreadercontrollerinitializer.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.CardReaderControllerInitializer
+image::CRA/generated/cardreadercontrollerinitializer.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::ICardReaderControllerInitializer[]

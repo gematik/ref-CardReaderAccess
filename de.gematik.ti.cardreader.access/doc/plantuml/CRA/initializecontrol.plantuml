@@ -1,0 +1,51 @@
+@startuml
+
+box "e.g. Android Context" #LightBlue
+	participant Application
+end box
+participant CardReaderControllerManager
+
+box "e.g. Android Context" #LightBlue
+	participant ICardReaderControllerInitializer
+	participant ctc1
+end box
+
+
+'Application -> Application : //initialize//
+'CardReaderControllerManager -> CardReaderControllerManager : //initialize//
+create ICardReaderControllerInitializer
+Application -> ICardReaderControllerInitializer : new
+Application -> CardReaderControllerManager : call initialize with ICardReaderControllerInitializer instance
+activate CardReaderControllerManager
+    CardReaderControllerManager -> ICardReaderControllerInitializer: initializeCardReaderController(ICardReaderController ctc1)
+    activate CardReaderControllerManager
+
+            ICardReaderControllerInitializer -> ICardReaderControllerInitializer: //internal work//
+            activate ICardReaderControllerInitializer
+                ICardReaderControllerInitializer -> ICardReaderControllerInitializer: findType
+                ICardReaderControllerInitializer -> ctc1: doSomething1()
+                    activate ctc1
+                        ctc1 -> ctc1: //internal work//
+                    return
+                ICardReaderControllerInitializer -> ctc1: addAndroidContext()
+                    activate ctc1
+                        ctc1 -> ctc1: //internal work//
+                    return
+         CardReaderControllerManager <-- ICardReaderControllerInitializer:
+     deactivate CardReaderControllerManager
+     deactivate ICardReaderControllerInitializer
+'    return
+
+    CardReaderControllerManager -> ICardReaderControllerInitializer: initializeCardReaderController(ICardReaderController ctc2)
+        activate CardReaderControllerManager
+            activate ICardReaderControllerInitializer
+                    ICardReaderControllerInitializer -> ICardReaderControllerInitializer: findType
+                    ICardReaderControllerInitializer -> ctc2: doSomething1()
+                activate ctc2
+                    ctc2 -> ctc2: //internal work//
+                return
+            CardReaderControllerManager <-- ICardReaderControllerInitializer
+         deactivate CardReaderControllerManager
+    return done
+    return
+@enduml

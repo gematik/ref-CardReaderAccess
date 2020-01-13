@@ -1,0 +1,69 @@
+@startuml
+
+  package de.gematik.ti.cardreader.access {
+    class CardReaderControllerManager {
+        {static} - instance : CardReaderControllerManager
+        - CardReaderControllerManager()
+        {static} + getInstance()
+        + initialize()
+        + cardReaderProviderAvailable()
+        + getCardReaderProviderNames()
+        + getCardReaderProviderDescriptors()
+        + getCardReaders()
+        + getCardReaderControllers()
+        - getCardReaderProviders()
+    }
+  }
+  
+
+  package de.gematik.ti.cardreader.access {
+    interface ICardReaderControllerInitializer {
+        {abstract} + initializeCardReaderController()
+    }
+  }
+
+  ICardReaderControllerInitializer  <|.. CardReaderControllerManager : <<use>>
+
+
+'Card Reader Provider API
+'--------------------------------------------------------------------------------------------------
+
+    node "CardReaderProvider API" {
+        package de.gematik.ti.cardreader.provider.api {
+            interface ICardReader {
+                {abstract} + initialize()
+                {abstract} + isInitialized()
+                {abstract} + connect()
+                {abstract} + connect()
+                {abstract} + getName()
+                {abstract} + isCardPresent()
+                {abstract} + waitForCardAbsent()
+                {abstract} + waitForCardPresent()
+            }
+        }
+
+        package de.gematik.ti.cardreader.provider.api {
+            package de.gematik.ti.cardreader.provider.api.entities {
+                  interface IProviderDescriptor {
+                      {abstract} + getName()
+                      {abstract} + getLicense()
+                      {abstract} + getDescription()
+                      {abstract} + getShortDescription()
+                      {abstract} + getClassName()
+                  }
+            }
+        }
+
+        package de.gematik.ti.cardreader.provider.api {
+            interface ICardReaderController {
+                {abstract} + getCardReaders()
+            }
+          }
+    }
+
+    ICardReader  <|.. CardReaderControllerManager : <<use>>
+    IProviderDescriptor  <|.. CardReaderControllerManager : <<use>>
+    ICardReaderController  <|.. CardReaderControllerManager : <<use>>
+
+'--------------------------------------------------------------------------------------------------
+@enduml

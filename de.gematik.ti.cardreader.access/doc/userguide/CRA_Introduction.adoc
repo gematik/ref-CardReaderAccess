@@ -1,0 +1,15 @@
+ifndef::javadoc[]
+include::config.adoc[]
+
+== Introduction
+
+endif::javadoc[]
+
+This part describes the usage of CardReaderAccess API in order to use different card reader and provider in your application.
+The CardReaderAccess API provides a registry for higher layer applications to inform about new connected and disconnected card reader.
+
+.CardReaderAccess API Layer
+image::root/cra_layer.png[caption="{figure-caption} {counter:figure}: ",650]
+
+The CardReaderAccess API provides functionalities for all card reader <<Service Provider>> discovers by ServiceLoader.
+CardReaderAccess API implements the ServiceLoader for card reader <<Service Provider>>. This has the role of discovering and loading implementations lazily.

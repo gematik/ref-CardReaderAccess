@@ -1,0 +1,8 @@
+.idea/
+*.iml
+de.gematik.ti.cardreader.access/target/
+de.gematik.ti.cardreader.access/.gradle/
+de.gematik.ti.cardreader.access/build/
+.gradle/
+de.gematik.ti.cardreader.access/out/
+de.gematik.ti.cardreader.access/.asciidoctor/

@@ -1,0 +1,29 @@
+@startuml
+
+  package de.gematik.ti.cardreader.access {
+    class CardReaderControllerManager {
+        {static} - instance : CardReaderControllerManager
+        - CardReaderControllerManager()
+        {static} + getInstance()
+        + initialize()
+        + cardReaderProviderAvailable()
+        + getCardReaderProviderNames()
+        + getCardReaderProviderDescriptors()
+        + getCardReaders()
+        + getCardReaderControllers()
+        - getCardReaderProviders()
+    }
+  }
+
+
+  package de.gematik.ti.cardreader.access {
+    interface ICardReaderControllerInitializer {
+        {abstract} + initializeCardReaderController()
+    }
+  }
+
+  ICardReaderControllerInitializer  <|.. CardReaderControllerManager : <<use>>
+
+
+@enduml
+

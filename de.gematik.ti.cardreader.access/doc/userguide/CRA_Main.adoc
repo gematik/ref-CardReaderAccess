@@ -1,0 +1,7 @@
+include::config.adoc[]
+
+= CardReaderAccess API
+
+include::CRA_Introduction.adoc[]
+include::CRA_Overview.adoc[]
+include::CRA_GettingStarted.adoc[]

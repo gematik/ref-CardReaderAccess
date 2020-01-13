@@ -1,0 +1,17 @@
+@startuml
+
+  package de.gematik.ti.cardreader.access {
+    interface ICardReaderControllerInitializer {
+        {abstract} + initializeCardReaderController()
+    }
+  }
+
+    node "CardReaderProvider API" {
+        package de.gematik.ti.cardreader.provider.api {
+          interface ICardReaderController {
+              {abstract} + getCardReaders()
+          }
+        }
+    }
+  ICardReaderController  <|.. ICardReaderControllerInitializer : <<use>>
+@enduml
