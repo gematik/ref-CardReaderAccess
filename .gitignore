@@ -6,3 +6,9 @@ de.gematik.ti.cardreader.access/build/
 .gradle/
 de.gematik.ti.cardreader.access/out/
 de.gematik.ti.cardreader.access/.asciidoctor/
+
+githubPublish.jenkinsfile
+release.jenkinsfile
+githubBuild.jenkinsfile
+ciExtern.jenkinsfile
+ci.jenkinsfile

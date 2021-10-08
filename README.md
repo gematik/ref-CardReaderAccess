@@ -69,7 +69,7 @@ To use CardReaderAccess API library in a project, you need just to include follo
 **Gradle dependency settings to use CardReaderAccess API library.**
 
     dependencies {
-        implementation group: 'de.gematik.ti', name: 'cardreader.access', version: '1.1.2'
+        implementation group: 'de.gematik.ti', name: 'cardreader.access', version: '1.2.0'
     }
 
 **Maven dependency settings to use CardReaderAccess API library.**
@@ -78,6 +78,6 @@ To use CardReaderAccess API library in a project, you need just to include follo
         <dependency>
             <groupId>de.gematik.ti</groupId>
             <artifactId>cardreader.access</artifactId>
-            <version>1.1.2</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>

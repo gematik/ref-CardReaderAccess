@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CardReaderControllerManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cardreader.access</a> &gt; <a href="index.source.html" class="el_package">de.gematik.ti.cardreader.access</a> &gt; <span class="el_source">CardReaderControllerManager.java</span></div><h1>CardReaderControllerManager.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (c) 2021 gematik GmbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package de.gematik.ti.cardreader.access;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
+
+import de.gematik.ti.cardreader.provider.api.ICardReader;
+import de.gematik.ti.cardreader.provider.api.ICardReaderController;
+import de.gematik.ti.cardreader.provider.api.entities.IProviderDescriptor;
+import de.gematik.ti.cardreader.provider.spi.ICardReaderControllerProvider;
+import de.gematik.ti.utils.streams.stat.StreamUtils;
+
+/**
+ * include::{userguide}/CRA_Overview.adoc[tag=CardReaderControllerManager]
+ *
+ */
+public final class CardReaderControllerManager {
+
+    private static CardReaderControllerManager instance;
+
+    private CardReaderControllerManager() {
+    }
+
+    /**
+     * Get the singleton instance
+     * @return singleton instance of CardReaderControllerManager
+     */
+    public static synchronized CardReaderControllerManager getInstance() {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (instance == null) {</span>
+<span class="fc" id="L37">            instance = new CardReaderControllerManager();</span>
+        }
+<span class="fc" id="L39">        return instance;</span>
+    }
+
+    /**
+     * include::{userguide}/CRA_Overview.adoc[tag=CardReaderControllerManager_initializer]
+     * @param cardReaderControllerInitializer - implementation of ICardReaderControllerInitializer
+     * @return singleton instance of CardReaderControllerManager
+     */
+    public CardReaderControllerManager initialize(final ICardReaderControllerInitializer cardReaderControllerInitializer) {
+<span class="fc" id="L48">        getCardReaderControllers()</span>
+<span class="fc" id="L49">                .forEach(cardReaderControllerInitializer::initializeCardReaderController);</span>
+<span class="fc" id="L50">        return this;</span>
+    }
+
+    /**
+     * Check if card reader provider found by the service loader
+     * @return card reader provider found
+     */
+    public synchronized boolean cardReaderProviderAvailable() {
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        return !getCardReaderProviders().isEmpty();</span>
+    }
+
+    /**
+     * Create a collection with all card reader provider names found by the service loader
+     * @return collection of ard reader provider names
+     */
+    public synchronized Collection&lt;String&gt; getCardReaderProviderNames() {
+<span class="fc" id="L66">        return getCardReaderProviders().parallelStream().map(provider -&gt; provider.getClass().getName()).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Create a collection with all card reader provider descriptor objects found by the service loader
+     * @return collection of ard reader provider descriptors
+     */
+    public synchronized Collection&lt;IProviderDescriptor&gt; getCardReaderProviderDescriptors() {
+<span class="fc" id="L74">        return getCardReaderProviders().parallelStream().map(ICardReaderControllerProvider::getDescriptor).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Create a collection with all card reader found by card reader providers
+     * @return collection of card reader
+     */
+    public synchronized Collection&lt;ICardReader&gt; getCardReaders() {
+<span class="fc" id="L82">        return getCardReaderControllers().stream().map(StreamUtils.wrapFunction(ICardReaderController::getCardReaders))</span>
+<span class="fc" id="L83">                .flatMap(Collection::stream).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Create a collection with card reader controllers for all card reader providers
+     * @return collection of ICardReaderController
+     */
+    public synchronized Collection&lt;ICardReaderController&gt; getCardReaderControllers() {
+<span class="fc" id="L91">        return getCardReaderProviders().parallelStream().map(ICardReaderControllerProvider::getCardReaderController)</span>
+<span class="fc" id="L92">                .collect(Collectors.toList());</span>
+    }
+
+    private synchronized Collection&lt;ICardReaderControllerProvider&gt; getCardReaderProviders() {
+<span class="fc" id="L96">        List&lt;ICardReaderControllerProvider&gt; services = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L97">        ServiceLoader&lt;ICardReaderControllerProvider&gt; loader = ServiceLoader.load(ICardReaderControllerProvider.class);</span>
+<span class="fc" id="L98">        loader.forEach(services::add);</span>
+<span class="fc" id="L99">        return services;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
